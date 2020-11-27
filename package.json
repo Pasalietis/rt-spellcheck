@@ -24,6 +24,10 @@
   "bin": {
     "rt-spellcheck": "./dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Pasalietis/rt-spellcheck.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.15",
