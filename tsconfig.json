@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "types": [
+      "node"
+    ]
+  },
+  "files": [
+    "./src/index.ts"
+  ],
+  "include": [
+    "node_modules/@types/jest/index.d.ts"
+  ]
+}
+

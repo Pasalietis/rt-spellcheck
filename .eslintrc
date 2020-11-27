@@ -1,0 +1,40 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "airbnb-base",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/babel",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".ts"
+        ]
+      }
+    }
+  },
+  "rules": {
+    "semi": [
+      "error",
+      "never"
+    ],
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "import/extensions": [
+      "error",
+      {
+        "ts": "never"
+      }
+    ]
+  }
+}
