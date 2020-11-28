@@ -79,7 +79,16 @@ export default class Dictionary {
 
   getWord = (word: string): boolean => this.wordExists(word) || this.checkByPFX(word) || this.checkBySFX(word)
 
-  private wordExists = (word: string, code?: string): boolean => word in this.words && (!code || this.words[word].includes(code))
+  private wordExists = (word: string, codes?: string): boolean => {
+    if (!(word in this.words)) return false
+    if (!codes) return true
+
+    for (let i = 0; i < codes.length; i++) {
+      if (!this.words[word].includes(codes[i])) return false
+    }
+
+    return true
+  }
 
   private checkByPFX = (word: string): boolean => {
     const len = this.pfx.length
@@ -91,7 +100,7 @@ export default class Dictionary {
         const affWord = word.replace(aff.remove, aff.add)
 
         if (this.wordExists(affWord, aff.code)) return true
-        if (aff.combinable && this.checkBySFX(word, aff.code)) return true
+        if (aff.combinable && this.checkBySFX(affWord, aff.code)) return true
       }
     }
 
@@ -104,10 +113,10 @@ export default class Dictionary {
     for (let i = 0; i < len; i++) {
       const aff = this.sfx[i]
 
-      if ((!code || (aff.combinable && aff.code === code)) && word.match(aff.check)) {
+      if ((!code || aff.combinable) && word.match(aff.check)) {
         const affWord = word.replace(aff.remove, aff.add)
 
-        if (this.wordExists(affWord, aff.code)) return true
+        if (this.wordExists(affWord, `${code || ''}${aff.code}`)) return true
       }
     }
 
