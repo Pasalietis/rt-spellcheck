@@ -31,6 +31,7 @@
     "type": "git",
     "url": "git@github.com:Pasalietis/rt-spellcheck.git"
   },
+  "homepage": "https://github.com/Pasalietis/rt-spellcheck",
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.15",
