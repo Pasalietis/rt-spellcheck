@@ -3,7 +3,7 @@ import Dictionary from '../dictionary'
 export default class Spellchecker {
   dict: Dictionary
 
-  constructor(language: string) {
+  constructor(language?: string) {
     this.dict = new Dictionary(language)
   }
 

@@ -1,11 +1,11 @@
-import {getPFXRules, getSFXRules, parseLine} from './utils'
-import {AfxRules} from './types'
+import {getPFXRules, getSFXRules, parseAffixLine} from '../utils'
+import {AfxRules} from '../types'
 
 describe('parseLine', () => {
   it('parses correctly', () => {
     const data = 'SFX D as      ą               as'
     const expected = ['SFX', 'D', 'as', 'ą', 'as']
-    const result = parseLine(data)
+    const result = parseAffixLine(data)
 
     expect(result).toStrictEqual(expected)
   })
