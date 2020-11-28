@@ -1,4 +1,4 @@
-import Dictionary from './dictionary'
+import Dictionary from '../dictionary'
 
 export default class Spellchecker {
   dict: Dictionary
