@@ -13,5 +13,8 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true
-  }
+  },
+  "exclude": [
+    "dist/**/*.test.ts"
+  ]
 }
