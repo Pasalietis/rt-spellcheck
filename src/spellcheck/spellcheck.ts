@@ -8,7 +8,7 @@ export default class Spellchecker {
   }
 
   check = (aWord: string): boolean => {
-    const trimmedWord = aWord.trim()
+    const trimmedWord = aWord.replace(/\u00AD/g, '').trim()
 
     if (this.checkExact(trimmedWord)) return true
 
