@@ -43,3 +43,7 @@ spellchecker.dict.addDicFile(dic)
 
 const isValid = spellchecker.check('red')
 ```
+
+## License
+
+Open source [licensed as MIT](https://github.com/iamturns/eslint-config-airbnb-typescript/blob/master/LICENSE).
