@@ -46,4 +46,4 @@ const isValid = spellchecker.check('red')
 
 ## License
 
-Open source [licensed as MIT](https://github.com/iamturns/eslint-config-airbnb-typescript/blob/master/LICENSE).
+Open source [licensed as MIT](https://en.wikipedia.org/wiki/MIT_License).
