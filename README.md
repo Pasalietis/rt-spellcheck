@@ -1,6 +1,8 @@
 # Real Time Spellchecker in Javascript
 
-[![NPM version](https://badge.fury.io/js/rt-spellcheck.svg)](http://badge.fury.io/js/rt-spellcheck)
+[![Version](https://img.shields.io/npm/v/rt-spellcheck.svg?style=flat-square)](https://www.npmjs.com/package/rt-spellcheck?activeTab=versions)
+[![Downloads](https://img.shields.io/npm/dt/rt-spellcheck.svg?style=flat-square)](https://www.npmjs.com/package/rt-spellcheck)
+[![Last commit](https://img.shields.io/github/last-commit/Pasalietis/rt-spellcheck.svg?style=flat-square)](https://github.com/Pasalietis/rt-spellcheck/graphs/commit-activity)
 
 A lightweight spellchecker written in Javascript.
 
