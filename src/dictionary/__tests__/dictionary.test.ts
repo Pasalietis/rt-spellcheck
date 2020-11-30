@@ -17,8 +17,9 @@ SFX D Y 1
 SFX D as      ą               as
 `
 
-const dicFile = `3
-klapsėti/NTX
+const dicFile = `4
+klapsėti/NT
+klapsėti/X
 namas/D
 stalas
 `

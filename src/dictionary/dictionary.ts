@@ -73,7 +73,9 @@ export default class Dictionary {
     lines.slice(1).forEach((line) => {
       const [word, codes] = line.split('/', 2)
 
-      this.words[word] = codes || ''
+      if (!this.words[word]) this.words[word] = ''
+
+      this.words[word] += codes || ''
     })
   }
 
