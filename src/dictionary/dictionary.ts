@@ -8,7 +8,7 @@ export default class Dictionary {
 
   private readonly sfx: Array<Afx> = []
 
-  private readonly words: Record<string, string> = {}
+  private readonly words: Record<string, Array<string>> = {}
 
   constructor(language?: string) {
     if (language) this.loadDictionary(language)
@@ -39,12 +39,17 @@ export default class Dictionary {
       if (Number.isNaN(sequence)) throw new Error('Unable to parse *.aff file: out of sequence')
 
       for (let j = 1; j <= sequence; j++) {
-        const [, afxCode, remove, add, check] = parseAffixLine(lines[i + j])
+        const line = parseAffixLine(lines[i + j])
+        const [, afxCode, , , check] = line
+        let [, , remove, add] = line
 
         if (code !== afxCode) throw new Error('Unable to parse *.aff file: out of sequence')
 
         let target: Array<Afx>
         let rules: AfxRules
+
+        if (add === '0') add = ''
+        if (remove === '0') remove = ''
 
         if (type === 'PFX') {
           rules = getPFXRules(remove, add, check)
@@ -73,23 +78,32 @@ export default class Dictionary {
     lines.slice(1).forEach((line) => {
       const [word, codes] = line.split('/', 2)
 
-      if (!this.words[word]) this.words[word] = ''
+      if (!this.words[word]) this.words[word] = []
+      if (!codes) return
 
-      this.words[word] += codes || ''
+      this.words[word].push(codes)
     })
   }
 
   getWord = (word: string): boolean => this.wordExists(word) || this.checkByPFX(word) || this.checkBySFX(word)
 
   private wordExists = (word: string, codes?: string): boolean => {
-    if (!(word in this.words)) return false
+    const wordCodes = this.words[word]
+
+    if (!wordCodes) return false
     if (!codes) return true
 
-    for (let i = 0; i < codes.length; i++) {
-      if (!this.words[word].includes(codes[i])) return false
+    for (let i = 0; i < wordCodes.length; i++) {
+      let isValid = true
+
+      for (let j = 0; j < codes.length && isValid; j++) {
+        if (!wordCodes[i].includes(codes[j])) isValid = false
+      }
+
+      if (isValid) return true
     }
 
-    return true
+    return false
   }
 
   private checkByPFX = (word: string): boolean => {

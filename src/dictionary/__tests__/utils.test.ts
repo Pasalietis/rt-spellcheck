@@ -12,14 +12,14 @@ describe('parseLine', () => {
 })
 
 describe('getPFXRules', () => {
-  it('correctly parse 0', () => {
+  it('correctly parse empty add', () => {
     const expected: AfxRules = {
       add: '',
       remove: new RegExp('^pa'),
       check: new RegExp('^pa'),
     }
 
-    const result = getPFXRules('0', 'pa', '.')
+    const result = getPFXRules('', 'pa', '.')
 
     expect(result).toStrictEqual(expected)
   })
@@ -31,7 +31,7 @@ describe('getPFXRules', () => {
       check: new RegExp('^ati[dt]'),
     }
 
-    const result = getPFXRules('0', 'ati', '[dt]')
+    const result = getPFXRules('', 'ati', '[dt]')
 
     expect(result).toStrictEqual(expected)
   })
@@ -43,7 +43,7 @@ describe('getPFXRules', () => {
       check: new RegExp('^ati[^dt]'),
     }
 
-    const result = getPFXRules('0', 'ati', '[^dt]')
+    const result = getPFXRules('', 'ati', '[^dt]')
 
     expect(result).toStrictEqual(expected)
   })
@@ -62,19 +62,19 @@ describe('getPFXRules', () => {
 })
 
 describe('getSFXRules', () => {
-  it('correctly parse 0', () => {
+  it('correctly parse empty add', () => {
     const expected: AfxRules = {
       add: '',
       remove: new RegExp('m$'),
       check: new RegExp('ėm$'),
     }
 
-    const result = getSFXRules('0', 'm', 'ė')
+    const result = getSFXRules('', 'm', 'ė')
 
     expect(result).toStrictEqual(expected)
   })
 
-  it('correctly parse .', () => {
+  it('correctly parse check: .', () => {
     const expected: AfxRules = {
       add: 'ė',
       remove: new RegExp('m$'),
@@ -86,14 +86,14 @@ describe('getSFXRules', () => {
     expect(result).toStrictEqual(expected)
   })
 
-  it('correctly parse 0 and .', () => {
+  it('correctly parse empty add and check: .', () => {
     const expected: AfxRules = {
       add: '',
       remove: new RegExp('m$'),
       check: new RegExp('m$'),
     }
 
-    const result = getSFXRules('0', 'm', '.')
+    const result = getSFXRules('', 'm', '.')
 
     expect(result).toStrictEqual(expected)
   })
@@ -106,6 +106,18 @@ describe('getSFXRules', () => {
     }
 
     const result = getSFXRules('ė', 'iau', '[^dt]ė')
+
+    expect(result).toStrictEqual(expected)
+  })
+
+  it('correctly parse empty remove', () => {
+    const expected: AfxRules = {
+      add: 's',
+      remove: new RegExp('$'),
+      check: new RegExp('a$'),
+    }
+
+    const result = getSFXRules('s', '', 'as')
 
     expect(result).toStrictEqual(expected)
   })

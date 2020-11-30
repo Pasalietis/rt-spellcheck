@@ -13,13 +13,16 @@ SFX T ti      siančiuoju      [^sšzž]ti
 SFX X N 1
 SFX X ti      tu              ti
 
+SFX a Y 1
+SFX a ti      jo              ti
+
 SFX D Y 1
 SFX D as      ą               as
 `
 
 const dicFile = `4
-klapsėti/NT
-klapsėti/X
+klapsėti/NTX
+klapsėti/a
 namas/D
 stalas
 `
@@ -66,6 +69,11 @@ describe('Dictionary', () => {
 
     it('finds only unexsisting word', () => {
       expect(dict.getWord('kempiniukas')).toBeFalsy()
+    })
+
+    it('allows multiple definitions for same words but do no mix them', () => {
+      expect(dict.getWord('klapsėjo')).toBeTruthy()
+      expect(dict.getWord('nebeklapsėjo')).toBeFalsy()
     })
   })
 })
