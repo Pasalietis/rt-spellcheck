@@ -1,6 +1,6 @@
 {
   "name": "rt-spellcheck",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Parse and use Hunspell dictionaries in Javascript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
