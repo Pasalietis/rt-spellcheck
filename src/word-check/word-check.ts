@@ -39,7 +39,6 @@ export default class WordCheck {
 
         if (this.wordExists(afxWord, afx.code)) return true
 
-
         if (afx.combinable && this.checkBySFX(afxWord, afx.code)) return true
       }
     }

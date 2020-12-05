@@ -1,5 +1,5 @@
-import Dictionary from '../dictionary'
-import {Afx} from '../types'
+import Dictionary from './dictionary'
+import Affix from '../affix'
 
 const affFile = `SET UTF-8
 TRY iastnokreuldvėmgpjšbyžūczfčhąįųęwxq
@@ -39,20 +39,20 @@ describe('Dictionary', () => {
     })
 
     it('corectly adds prefixes', () => {
-      const expected: Array<Afx> = [
-        {remove: /^nebe/, add: '', check: /^nebe/, code: 'N', combinable: true},
+      const expected: Array<Affix> = [
+        new Affix({type: 'PFX', code: 'N', remove: 'nebe', add: '', check: '.', combinable: true}),
       ]
 
       expect(dict.prefixes).toStrictEqual(expected)
     })
 
     it('corectly adds suffixes', () => {
-      const expected: Array<Afx> = [
-        {remove: /siančioj$/, add: 'ti', check: /[^sšzž]siančioj$/, code: 'T', combinable: true},
-        {remove: /siančiuoju$/, add: 'ti', check: /[^sšzž]siančiuoju$/, code: 'T', combinable: true},
-        {remove: /tu$/, add: 'ti', check: /tu$/, code: 'X', combinable: false},
-        {remove: /jo$/, add: 'ti', check: /jo$/, code: 'a', combinable: true},
-        {remove: /ą$/, add: 'as', check: /ą$/, code: 'D', combinable: true},
+      const expected: Array<Affix> = [
+        new Affix({type: 'SFX', code: 'T', remove: 'siančioj', add: 'ti', check: '[^sšzž]ti', combinable: true}),
+        new Affix({type: 'SFX', code: 'T', remove: 'siančiuoju', add: 'ti', check: '[^sšzž]ti', combinable: true}),
+        new Affix({type: 'SFX', code: 'X', remove: 'tu', add: 'ti', check: 'ti', combinable: false}),
+        new Affix({type: 'SFX', code: 'a', remove: 'jo', add: 'ti', check: 'ti', combinable: true}),
+        new Affix({type: 'SFX', code: 'D', remove: 'ą', add: 'as', check: 'as', combinable: true}),
       ]
 
       expect(dict.suffixes).toStrictEqual(expected)

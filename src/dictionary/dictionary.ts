@@ -1,13 +1,13 @@
 import {readFileSync} from 'fs'
 import {join} from 'path'
 
-import {Afx} from './types'
-import {getPFXRules, getSFXRules, parseAffixLine, removeAffixComments, removeDicComments} from './utils'
+import Affix from '../affix'
+import {removeAffixComments, removeDicComments} from './utils'
 
 export default class Dictionary {
-  readonly prefixes: Array<Afx> = []
+  readonly prefixes: Array<Affix> = []
 
-  readonly suffixes: Array<Afx> = []
+  readonly suffixes: Array<Affix> = []
 
   readonly words: Record<string, Array<string>> = {}
 
@@ -32,7 +32,7 @@ export default class Dictionary {
     const lines = removeAffixComments(`${data}`).split('\n')
 
     for (let i = 2; i < lines.length; i++) {
-      const [type, code, combinableStr, sequenceStr] = parseAffixLine(lines[i])
+      const [type, code, combinableStr, sequenceStr] = Affix.parseAffixLine(lines[i])
 
       const sequence = Number(sequenceStr)
       const combinable = combinableStr === 'Y'
@@ -40,28 +40,14 @@ export default class Dictionary {
       if (Number.isNaN(sequence)) throw new Error('Unable to parse *.aff file: out of sequence')
 
       for (let j = 1; j <= sequence; j++) {
-        const line = parseAffixLine(lines[i + j])
-        const [, afxCode, , , check] = line
-        let [, , remove, add] = line
+        const affix = Affix.createByLine(lines[i + j], combinable)
 
-        if (code !== afxCode) throw new Error('Unable to parse *.aff file: out of sequence')
-
-        if (add === '0') add = ''
-        if (remove === '0') remove = ''
+        if (code !== affix.code) throw new Error('Unable to parse *.aff file: out of sequence')
 
         if (type === 'PFX') {
-          this.prefixes.push({
-            code,
-            combinable,
-            ...getPFXRules(remove, add, check),
-          })
+          this.prefixes.push(affix)
         } else if (type === 'SFX') {
-
-          this.suffixes.push({
-            code,
-            combinable,
-            ...getSFXRules(remove, add, check),
-          })
+          this.suffixes.push(affix)
         } else {
           throw new Error(`Unknown aff type: ${type}`)
         }

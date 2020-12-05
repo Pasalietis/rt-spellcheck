@@ -1,5 +1,3 @@
-import {AfxRules} from './types'
-
 export function removeAffixComments(data: string): string {
   // Remove comments
   data = data.replace(/#.*$/mg, '')
@@ -12,32 +10,6 @@ export function removeAffixComments(data: string): string {
 
   // Trim the entire string
   return data.trim()
-}
-
-export function parseAffixLine(line: string): string[] {
-  return line.split(/\s+/)
-}
-
-export function getPFXRules(add: string, remove: string, check: string): AfxRules {
-  const removeRegexp = new RegExp(`^${remove}`)
-  const checkRegexp = check === '.' ? removeRegexp : new RegExp(`^${remove}${check.replace(new RegExp(`^${add}`), '')}`)
-
-  return {
-    add,
-    remove: removeRegexp,
-    check: checkRegexp,
-  }
-}
-
-export function getSFXRules(add: string, remove: string, check: string): AfxRules {
-  const removeRegexp = new RegExp(`${remove}$`)
-  const checkRegexp = check === '.' ? removeRegexp : new RegExp(`${check.replace(new RegExp(`${add}$`), '')}${remove}$`)
-
-  return {
-    add,
-    remove: removeRegexp,
-    check: checkRegexp,
-  }
 }
 
 export function removeDicComments(data: string): string {
