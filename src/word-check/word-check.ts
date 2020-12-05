@@ -32,13 +32,15 @@ export default class WordCheck {
     const len = this.dictionary.prefixes.length
 
     for (let i = 0; i < len; i++) {
-      const aff = this.dictionary.prefixes[i]
+      const afx = this.dictionary.prefixes[i]
 
-      if (word.match(aff.check)) {
-        const affWord = word.replace(aff.remove, aff.add)
+      if (word.match(afx.check)) {
+        const afxWord = word.replace(afx.remove, afx.add)
 
-        if (this.wordExists(affWord, aff.code)) return true
-        if (aff.combinable && this.checkBySFX(affWord, aff.code)) return true
+        if (this.wordExists(afxWord, afx.code)) return true
+
+
+        if (afx.combinable && this.checkBySFX(afxWord, afx.code)) return true
       }
     }
 
@@ -49,12 +51,12 @@ export default class WordCheck {
     const len = this.dictionary.suffixes.length
 
     for (let i = 0; i < len; i++) {
-      const aff = this.dictionary.suffixes[i]
+      const afx = this.dictionary.suffixes[i]
 
-      if ((!code || aff.combinable) && word.match(aff.check)) {
-        const affWord = word.replace(aff.remove, aff.add)
+      if ((!code || afx.combinable) && word.match(afx.check)) {
+        const afxWord = word.replace(afx.remove, afx.add)
 
-        if (this.wordExists(affWord, `${code || ''}${aff.code}`)) return true
+        if (this.wordExists(afxWord, `${code || ''}${afx.code}`)) return true
       }
     }
 
