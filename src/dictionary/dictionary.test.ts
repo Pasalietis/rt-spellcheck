@@ -1,5 +1,4 @@
 import Dictionary from './dictionary'
-import Affix from '../affix'
 
 const affFile = `SET UTF-8
 TRY iastnokreuldvėmgpjšbyžūczfčhąįųęwxq
@@ -38,24 +37,29 @@ describe('Dictionary', () => {
       dict.addAffixFile(affFile)
     })
 
-    it('corectly adds prefixes', () => {
-      const expected: Array<Affix> = [
-        new Affix({type: 'PFX', code: 'N', remove: 'nebe', add: '', check: '.', combinable: true}),
-      ]
-
-      expect(dict.prefixes).toStrictEqual(expected)
+    it('correctly adds prefixes', () => {
+      expect(dict.prefixes).toHaveLength(1)
+      expect(dict.prefixes[0].code).toBe('N')
+      expect(dict.prefixes[0].combinable).toBeTruthy()
     })
 
-    it('corectly adds suffixes', () => {
-      const expected: Array<Affix> = [
-        new Affix({type: 'SFX', code: 'T', remove: 'siančioj', add: 'ti', check: '[^sšzž]ti', combinable: true}),
-        new Affix({type: 'SFX', code: 'T', remove: 'siančiuoju', add: 'ti', check: '[^sšzž]ti', combinable: true}),
-        new Affix({type: 'SFX', code: 'X', remove: 'tu', add: 'ti', check: 'ti', combinable: false}),
-        new Affix({type: 'SFX', code: 'a', remove: 'jo', add: 'ti', check: 'ti', combinable: true}),
-        new Affix({type: 'SFX', code: 'D', remove: 'ą', add: 'as', check: 'as', combinable: true}),
-      ]
+    it('correctly adds suffixes', () => {
+      expect(dict.suffixes).toHaveLength(5)
 
-      expect(dict.suffixes).toStrictEqual(expected)
+      expect(dict.suffixes[0].code).toBe('T')
+      expect(dict.suffixes[0].combinable).toBeTruthy()
+
+      expect(dict.suffixes[1].code).toBe('T')
+      expect(dict.suffixes[1].combinable).toBeTruthy()
+
+      expect(dict.suffixes[2].code).toBe('X')
+      expect(dict.suffixes[2].combinable).toBeFalsy()
+
+      expect(dict.suffixes[3].code).toBe('a')
+      expect(dict.suffixes[3].combinable).toBeTruthy()
+
+      expect(dict.suffixes[4].code).toBe('D')
+      expect(dict.suffixes[4].combinable).toBeTruthy()
     })
   })
 

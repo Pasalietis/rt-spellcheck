@@ -1,5 +1,5 @@
-import WordCheck from '../word-check'
-import Dictionary from '../../dictionary'
+import Dictionary from '../dictionary'
+import WordCheck from './word-check'
 
 const affFile = `SET UTF-8
 TRY iastnokreuldvėmgpjšbyžūczfčhąįųęwxq

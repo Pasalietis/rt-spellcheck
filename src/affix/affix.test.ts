@@ -20,10 +20,19 @@ describe('Affix', () => {
       const affix = Affix.createByLine('SFX D as      ą               as', false)
 
       expect(affix.code).toBe('D')
-      expect(affix.add).toBe('as')
-      expect(affix.remove).toStrictEqual(/ą$/)
-      expect(affix.check).toStrictEqual(/ą$/)
-      expect(affix.combinable).toBe(false)
+      expect(affix.combinable).toBeFalsy()
+      expect(affix.testWord('stalas')).toBeFalsy()
+      expect(affix.testWord('stalą')).toBeTruthy()
+      expect(affix.applyToWord('stalą')).toBe('stalas')
+    })
+  })
+
+  describe('createByLine', () => {
+    it('parses correctly', () => {
+      const expected = ['SFX', 'D', 'as', 'ą', 'as']
+      const result = Affix.parseAffixLine('SFX D as      ą               as')
+
+      expect(result).toStrictEqual(expected)
     })
   })
 
@@ -35,33 +44,45 @@ describe('Affix', () => {
     it('correctly parse remove', () => {
       const affix = new Affix({...affixParameters, remove: 'pa'})
 
-      expect(affix.add).toBe('')
-      expect(affix.remove).toStrictEqual(/^pa/)
-      expect(affix.check).toStrictEqual(/^pa/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('pafoo')).toBeTruthy()
+
+      expect(affix.applyToWord('pafoo')).toBe('foo')
     })
 
     it('correctly parse check', () => {
       const affix = new Affix({...affixParameters, remove: 'ati', check: '[dt]'})
 
-      expect(affix.add).toBe('')
-      expect(affix.remove).toStrictEqual(/^ati/)
-      expect(affix.check).toStrictEqual(/^ati[dt]/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('atifoo')).toBeFalsy()
+      expect(affix.testWord('atidfoo')).toBeTruthy()
+      expect(affix.testWord('atitfoo')).toBeTruthy()
+
+      expect(affix.applyToWord('atidfoo')).toBe('dfoo')
+      expect(affix.applyToWord('atitbar')).toBe('tbar')
     })
 
     it('works with regex symbols', () => {
       const affix = new Affix({...affixParameters, remove: 'ati', check: '[^dt]'})
 
-      expect(affix.add).toBe('')
-      expect(affix.remove).toStrictEqual(/^ati/)
-      expect(affix.check).toStrictEqual(/^ati[^dt]/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('atifoo')).toBeTruthy()
+      expect(affix.testWord('atidfoo')).toBeFalsy()
+      expect(affix.testWord('atitfoo')).toBeFalsy()
+
+      expect(affix.applyToWord('atifoo')).toBe('foo')
     })
 
     it('changes remove with add', () => {
       const affix = new Affix({...affixParameters, add: 'ė', remove: 'at', check: 'ėne'})
 
-      expect(affix.add).toBe('ė')
-      expect(affix.remove).toStrictEqual(/^at/)
-      expect(affix.check).toStrictEqual(/^atne/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('atfoo')).toBeFalsy()
+      expect(affix.testWord('ėnefoo')).toBeFalsy()
+      expect(affix.testWord('nefoo')).toBeFalsy()
+      expect(affix.testWord('atnefoo')).toBeTruthy()
+
+      expect(affix.applyToWord('atnefoo')).toBe('ėnefoo')
     })
   })
 
@@ -73,41 +94,52 @@ describe('Affix', () => {
     it('correctly parse empty add', () => {
       const affix = new Affix({...affixParameters, remove: 'm', check: 'ė'})
 
-      expect(affix.add).toBe('')
-      expect(affix.remove).toStrictEqual(/m$/)
-      expect(affix.check).toStrictEqual(/ėm$/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('foom')).toBeFalsy()
+      expect(affix.testWord('fooėm')).toBeTruthy()
+
+      expect(affix.applyToWord('fooėm')).toBe('fooė')
     })
 
     it('correctly parse empty check', () => {
       const affix = new Affix({...affixParameters, add: 'ė', remove: 'm'})
 
-      expect(affix.add).toBe('ė')
-      expect(affix.remove).toStrictEqual(/m$/)
-      expect(affix.check).toStrictEqual(/m$/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('fooė')).toBeFalsy()
+      expect(affix.testWord('foom')).toBeTruthy()
+
+      expect(affix.applyToWord('foom')).toBe('fooė')
     })
 
     it('correctly parse empty add and check', () => {
       const affix = new Affix({...affixParameters, remove: 'm'})
 
-      expect(affix.add).toBe('')
-      expect(affix.remove).toStrictEqual(/m$/)
-      expect(affix.check).toStrictEqual(/m$/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('foom')).toBeTruthy()
+
+      expect(affix.applyToWord('foom')).toBe('foo')
     })
 
     it('correctly parse check', () => {
       const affix = new Affix({...affixParameters, add: 'ė', remove: 'iau', check: '[^dt]ė'})
 
-      expect(affix.add).toBe('ė')
-      expect(affix.remove).toStrictEqual(/iau$/)
-      expect(affix.check).toStrictEqual(/[^dt]iau$/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('fooiau')).toBeTruthy()
+      expect(affix.testWord('foodiau')).toBeFalsy()
+      expect(affix.testWord('footiau')).toBeFalsy()
+
+      expect(affix.applyToWord('fooiau')).toBe('fooė')
     })
 
     it('correctly parse empty remove', () => {
       const affix = new Affix({...affixParameters, add: 's', check: 'as'})
 
-      expect(affix.add).toBe('s')
-      expect(affix.remove).toStrictEqual(/$/)
-      expect(affix.check).toStrictEqual(/a$/)
+      expect(affix.testWord('foo')).toBeFalsy()
+      expect(affix.testWord('fooa')).toBeTruthy()
+      expect(affix.testWord('fooas')).toBeFalsy()
+      expect(affix.testWord('foos')).toBeFalsy()
+
+      expect(affix.applyToWord('fooa')).toBe('fooas')
     })
   })
 })

@@ -34,8 +34,8 @@ export default class WordCheck {
     for (let i = 0; i < len; i++) {
       const afx = this.dictionary.prefixes[i]
 
-      if (word.match(afx.check)) {
-        const afxWord = word.replace(afx.remove, afx.add)
+      if (afx.testWord(word)) {
+        const afxWord = afx.applyToWord(word)
 
         if (this.wordExists(afxWord, afx.code)) return true
 
@@ -52,8 +52,8 @@ export default class WordCheck {
     for (let i = 0; i < len; i++) {
       const afx = this.dictionary.suffixes[i]
 
-      if ((!code || afx.combinable) && word.match(afx.check)) {
-        const afxWord = word.replace(afx.remove, afx.add)
+      if ((!code || afx.combinable) && afx.testWord(word)) {
+        const afxWord = afx.applyToWord(word)
 
         if (this.wordExists(afxWord, `${code || ''}${afx.code}`)) return true
       }

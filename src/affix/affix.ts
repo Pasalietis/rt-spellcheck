@@ -4,18 +4,22 @@ import {AffixParameters} from './types'
 export default class Affix {
   public readonly code: string
 
-  public readonly add: string
-
-  public readonly remove: RegExp
-
-  public readonly check: RegExp
-
   public readonly combinable: boolean
+
+  private readonly add: string
+
+  private readonly remove: RegExp
+
+  private readonly check: RegExp
 
   public static createByLine(line: string, combinable: boolean): Affix {
     const [type, code, add, remove, check] = Affix.parseAffixLine(line)
 
     return new Affix({type, code, add, remove, check, combinable})
+  }
+
+  public static parseAffixLine(line: string): string[] {
+    return line.split(/\s+/)
   }
 
   constructor({type, code, add, remove, check, combinable}: AffixParameters) {
@@ -36,9 +40,9 @@ export default class Affix {
     this.check = Affix.insertValuesToTemplate(template, remove, check.replace(Affix.insertValuesToTemplate(template, add), ''))
   }
 
-  public static parseAffixLine(line: string): string[] {
-    return line.split(/\s+/)
-  }
+  public testWord = (word: string): boolean => !!word.match(this.check)
+
+  public applyToWord = (word: string): string => word.replace(this.remove, this.add)
 
   private static getTemplateByType(type: string): string {
     if (type === 'PFX') return PREFIX_TEMPLATE
