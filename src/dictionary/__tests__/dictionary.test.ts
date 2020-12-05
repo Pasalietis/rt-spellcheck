@@ -1,4 +1,5 @@
 import Dictionary from '../dictionary'
+import {Afx} from '../types'
 
 const affFile = `SET UTF-8
 TRY iastnokreuldvėmgpjšbyžūczfčhąįųęwxq
@@ -28,52 +29,53 @@ stalas
 `
 
 describe('Dictionary', () => {
-  let dict: Dictionary
+  describe('addAffixFile', () => {
+    let dict: Dictionary
 
-  beforeEach(() => {
-    dict = new Dictionary()
-    dict.addAffixFile(affFile)
-    dict.addDicFile(dicFile)
+    beforeEach(() => {
+      dict = new Dictionary()
+
+      dict.addAffixFile(affFile)
+    })
+
+    it('corectly adds prefixes', () => {
+      const expected: Array<Afx> = [
+        {remove: /^nebe/, add: '', check: /^nebe/, code: 'N', combinable: true},
+      ]
+
+      expect(dict.prefixes).toStrictEqual(expected)
+    })
+
+    it('corectly adds suffixes', () => {
+      const expected: Array<Afx> = [
+        {remove: /siančioj$/, add: 'ti', check: /[^sšzž]siančioj$/, code: 'T', combinable: true},
+        {remove: /siančiuoju$/, add: 'ti', check: /[^sšzž]siančiuoju$/, code: 'T', combinable: true},
+        {remove: /tu$/, add: 'ti', check: /tu$/, code: 'X', combinable: false},
+        {remove: /jo$/, add: 'ti', check: /jo$/, code: 'a', combinable: true},
+        {remove: /ą$/, add: 'as', check: /ą$/, code: 'D', combinable: true},
+      ]
+
+      expect(dict.suffixes).toStrictEqual(expected)
+    })
   })
 
-  describe('getWord', () => {
-    it('find simple word', () => {
-      expect(dict.getWord('namas')).toBeTruthy()
+  describe('addDicFile', () => {
+    let dict: Dictionary
+
+    beforeEach(() => {
+      dict = new Dictionary()
+
+      dict.addDicFile(dicFile)
     })
 
-    it('find word with UTF-8', () => {
-      expect(dict.getWord('klapsėti')).toBeTruthy()
-    })
+    it('combines passes duplicated words', () => {
+      const expected = {
+        'klapsėti': ['NTX', 'a'],
+        namas: ['D'],
+        stalas: [],
+      }
 
-    it('applies suffix', () => {
-      expect(dict.getWord('namą')).toBeTruthy()
-    })
-
-    it('applies only assigned suffix', () => {
-      expect(dict.getWord('stalą')).toBeFalsy()
-    })
-
-    it('applies suffix with multipile rules', () => {
-      expect(dict.getWord('klapsėsiančioj')).toBeTruthy()
-    })
-
-    it('combines prefix with sufix', () => {
-      expect(dict.getWord('nebeklapsėsiančiuoju')).toBeTruthy()
-    })
-
-    it('do not combines if sufix is not combinable', () => {
-      expect(dict.getWord('klapsėtu')).toBeTruthy()
-      expect(dict.getWord('nebeklapsėti')).toBeTruthy()
-      expect(dict.getWord('nebeklapsėtu')).toBeFalsy()
-    })
-
-    it('finds only unexsisting word', () => {
-      expect(dict.getWord('kempiniukas')).toBeFalsy()
-    })
-
-    it('allows multiple definitions for same words but do no mix them', () => {
-      expect(dict.getWord('klapsėjo')).toBeTruthy()
-      expect(dict.getWord('nebeklapsėjo')).toBeFalsy()
+      expect(dict.words).toStrictEqual(expected)
     })
   })
 })

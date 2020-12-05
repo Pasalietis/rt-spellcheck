@@ -1,10 +1,14 @@
 import Dictionary from '../dictionary'
+import WordCheck from '../word-check'
 
 export default class Spellchecker {
   dict: Dictionary
 
+  private readonly wordCheck: WordCheck
+
   constructor(language?: string) {
     this.dict = new Dictionary(language)
+    this.wordCheck = new WordCheck(this.dict)
   }
 
   check = (aWord: string): boolean => {
@@ -24,6 +28,6 @@ export default class Spellchecker {
   }
 
   private checkExact = (word: string): boolean => {
-    return this.dict.getWord(word)
+    return this.wordCheck.check(word)
   }
 }
