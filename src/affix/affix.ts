@@ -40,9 +40,13 @@ export default class Affix {
     this.check = Affix.insertValuesToTemplate(template, remove, check.replace(Affix.insertValuesToTemplate(template, add), ''))
   }
 
-  public testWord = (word: string): boolean => !!word.match(this.check)
+  testWord(word: string): boolean {
+    return !!word.match(this.check)
+  }
 
-  public applyToWord = (word: string): string => word.replace(this.remove, this.add)
+  applyToWord(word: string): string {
+    return word.replace(this.remove, this.add)
+  }
 
   private static getTemplateByType(type: string): string {
     if (type === 'PFX') return PREFIX_TEMPLATE
