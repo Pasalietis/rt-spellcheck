@@ -35,6 +35,10 @@
       {
         "ts": "never"
       }
+    ],
+    "eol-last": [
+      "error",
+      "always"
     ]
   }
 }
