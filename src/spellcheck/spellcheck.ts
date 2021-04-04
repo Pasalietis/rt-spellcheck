@@ -27,7 +27,5 @@ export default class Spellchecker {
     return lowercaseWord !== trimmedWord && this.checkExact(lowercaseWord)
   }
 
-  private checkExact = (word: string): boolean => {
-    return this.wordCheck.check(word)
-  }
+  private checkExact = (word: string): boolean => this.wordCheck.check(word)
 }
