@@ -9,7 +9,7 @@ A lightweight spellchecker written in Javascript.
 ### Installation
 
 ```shell script
-yarn add tr-spellchecker
+yarn add rt-spellcheck
 ```
 
 Optionaly you could add [dictionary](https://github.com/wooorm/dictionaries)
@@ -23,7 +23,7 @@ yarn add dictionary-en
 Initialize a spellchecker instance:
 
 ```ts
-import Spellchecker from 'rt-spellchecker'
+import Spellchecker from 'rt-spellcheck'
 
 const spellchecker = new Spellchecker('en')
 const isValid = spellchecker.check('red')
@@ -32,7 +32,7 @@ const isValid = spellchecker.check('red')
 Or load custom dictionary
 
 ```ts
-const Spellchecker = require('rt-spellchecker')
+const Spellchecker = require('rt-spellcheck')
 
 const aff = require('dictionary-en/index.aff')
 const dic = require('dictionary-en/index.dic')
