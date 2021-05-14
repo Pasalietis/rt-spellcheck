@@ -31,29 +31,31 @@ export default class Dictionary {
   addAffixFile = (data: string | Buffer): void => {
     const lines = removeAffixComments(`${data}`).split('\n')
 
-    for (let i = 2; i < lines.length; i++) {
+    for (let i = 1; i < lines.length; i++) {
       const [type, code, combinableStr, sequenceStr] = Affix.parseAffixLine(lines[i])
 
-      const sequence = Number(sequenceStr)
-      const combinable = combinableStr === 'Y'
+      if (['PFX', 'SFX'].includes(type)) {
+        const sequence = Number(sequenceStr)
+        const combinable = combinableStr === 'Y'
 
-      if (Number.isNaN(sequence)) throw new Error('Unable to parse *.aff file: out of sequence')
+        if (Number.isNaN(sequence)) throw new Error('Unable to parse *.aff file: out of sequence')
 
-      for (let j = 1; j <= sequence; j++) {
-        const affix = Affix.createByLine(lines[i + j], combinable)
+        for (let j = 1; j <= sequence; j++) {
+          const affix = Affix.createByLine(lines[i + j], combinable)
 
-        if (code !== affix.code) throw new Error('Unable to parse *.aff file: out of sequence')
+          if (code !== affix.code) throw new Error('Unable to parse *.aff file: out of sequence')
 
-        if (type === 'PFX') {
-          this.prefixes.push(affix)
-        } else if (type === 'SFX') {
-          this.suffixes.push(affix)
-        } else {
-          throw new Error(`Unknown aff type: ${type}`)
+          if (type === 'PFX') {
+            this.prefixes.push(affix)
+          } else if (type === 'SFX') {
+            this.suffixes.push(affix)
+          } else {
+            throw new Error(`Unknown aff type: ${type}`)
+          }
         }
-      }
 
-      i += sequence
+        i += sequence
+      }
     }
   }
 

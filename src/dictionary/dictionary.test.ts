@@ -3,6 +3,13 @@ import Dictionary from './dictionary'
 const affFile = `SET UTF-8
 TRY iastnokreuldvėmgpjšbyžūczfčhąįųęwxq
 
+REP 2
+REP n t
+REP g k
+
+MAP 1
+MAP aÄ
+
 PFX N Y 1
 PFX N 0       nebe            .
 
