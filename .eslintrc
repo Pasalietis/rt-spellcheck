@@ -34,6 +34,7 @@
         "ts": "never"
       }
     ],
+    "import/no-named-default": "off",
     "eol-last": [
       "error",
       "always"

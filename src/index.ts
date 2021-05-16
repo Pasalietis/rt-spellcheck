@@ -1,1 +1,3 @@
-export {default} from './spellcheck'
+import {default as Spellcheck} from './spellcheck'
+
+export = Spellcheck
